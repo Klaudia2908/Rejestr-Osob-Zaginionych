@@ -1,0 +1,106 @@
+﻿@using RejOsZag.Models
+@model RejOsZag.Models.OsobaZaginiona
+
+@{
+	ViewBag.Title = "Home Page";
+}
+
+@{
+	var listaOsobZaginionych = (ListaOsobZaginionych)ViewData["listaOsobZaginionych"];
+	var czyAdmin = (string)ViewData["czyAdmin"];
+}
+
+<body>
+	@if (User.Identity.IsAuthenticated)
+	{
+		<br />
+		<br />
+		<br />
+		<h3>Dodaj dane osoby zaginionej</h3>
+		using (Html.BeginForm("Index", "Home", FormMethod.Post))
+		{
+			<table cellpadding="0" cellspacing="0">
+
+				<tr>
+					<th colspan="2" align="center">Dane Osoby Zaginionej</th>
+				</tr>
+				<tr>
+					<td>Imie</td>
+					<td>@Html.TextBoxFor(i => i.imie) </td>
+				</tr>
+				<tr>
+					<td>Nazwisko</td>
+					<td>@Html.TextBoxFor(i => i.nazwisko) </td>
+				</tr>
+				<tr>
+					<td>Miejscowość zaginięcia</td>
+					<td>@Html.TextBoxFor(i => i.miejscowoscZaginiecia) </td>
+				</tr>
+				<tr>
+					<td>Płeć</td>
+					<td>@Html.TextBoxFor(i => i.plec) </td>
+				</tr>
+				<tr>
+					<td>Data Urodzenia</td>
+					<td>@Html.TextBoxFor(i => i.dataUrodzenia, new { @class = "form-control", type = "date" })</td>
+				</tr>
+			</table>
+			<br />
+			<input type="submit" value="Wprowadź" />
+		}
+	}
+
+	<br />
+	<br />
+	<br />
+	<table style="width:100%">
+		@using (Html.BeginForm("FiltrujOsobyZaginione", "Home", FormMethod.Get))
+		{
+			<p>
+				Filtruj płeć: @Html.TextBox("plecZFormularza")
+				<input type="submit" value="Szukaj" />
+			</p>
+		}
+		<tr>
+			<th>Id</th>
+			<th>Imię</th>
+			<th>Nazwisko</th>
+			<th>Miejscowośc zaginięcia</th>
+			<th>Płeć</th>
+			<th>Data urodzenia</th>
+		</tr>
+		@foreach (var osobaZaginiona in listaOsobZaginionych.osobyZaginione)
+		{
+			<tr>
+				<td>@osobaZaginiona.id</td>
+				<td>@osobaZaginiona.imie</td>
+				<td>@osobaZaginiona.nazwisko</td>
+				<td>@osobaZaginiona.miejscowoscZaginiecia</td>
+				<td>@osobaZaginiona.plec</td>
+				<td>@osobaZaginiona.dataUrodzenia.ToShortDateString()</td>
+			</tr>
+		}
+	</table>
+
+	@if (czyAdmin == "T")
+	{
+		using (Html.BeginForm("UsunOsobeZaginiona", "Home", FormMethod.Post))
+		{
+			<br />
+			<br />
+
+			<table cellpadding="0" cellspacing="0">
+
+				<tr>
+					<th colspan="2" align="center">Usuń osobę zaginioną z rejestru</th>
+				</tr>
+				<tr>
+					<td>Id</td>
+					<td>@Html.TextBoxFor(i => i.id) </td>
+				</tr>
+			</table>
+			<br />
+			<input type="submit" value="Usuń" />
+		}
+	}
+</body>

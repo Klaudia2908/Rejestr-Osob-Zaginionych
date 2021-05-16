@@ -1,0 +1,52 @@
+﻿@using RejOsZag.Models
+@model RejOsZag.Models.UzytkownikDoUsuniecia
+
+@{
+	ViewBag.Title = "ManageUsers";
+}
+
+@{
+	var czyAdmin = (string)ViewData["czyAdmin"];
+	var uzytkownicy = (List<ApplicationUser>)ViewData["uzytkownicy"];
+}
+
+@if (czyAdmin == "T")
+{
+	<br />
+	<br />
+	<br />
+	<table style="width:100%">
+		<tr>
+			<th>E-mail</th>
+		</tr>
+		@foreach (var uzytkownik in uzytkownicy)
+		{
+			<tr>
+				<td>@uzytkownik.Email</td>
+			</tr>
+		}
+	</table>
+
+	<br />
+	<br />
+	<br />
+	using (Html.BeginForm("ManageUsers", "Home", FormMethod.Post))
+	{
+		<table cellpadding="0" cellspacing="0">
+
+			<tr>
+				<th colspan="2" align="center">Użytkownik do usunięcia</th>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>@Html.TextBoxFor(i => i.email) </td>
+			</tr>
+		</table>
+		<br/>
+		<input type="submit" value="Wprowadź" />
+	}
+}
+else
+{
+	<h2>Aby wyświetlić tą zawartość należy posiadać uprawnienia Administratora!</h2>
+}
